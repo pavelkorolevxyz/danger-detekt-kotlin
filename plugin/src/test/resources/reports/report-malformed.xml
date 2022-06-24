@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle>
+    <file>
+        <error message="Malformed XML file" />
+        <error source="No required params" />
+    </file>
+    <unknown-tag unknown-param="unknown-value" />
+</checkstyle>

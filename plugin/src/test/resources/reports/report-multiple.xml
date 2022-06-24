@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="4.3">
+    <file name="B.kt">
+        <error column="2" line="3" message="Info B" severity="info" source="Rule B" />
+        <error column="4" line="5" message="Info B2" severity="info" source="Rule B2" />
+        <error column="6" line="7" message="Info B3" severity="info" source="Rule B3" />
+    </file>
+    <file name="C.kt">
+        <error column="8" line="9" message="Warning C" severity="warning" source="Rule C" />
+    </file>
+</checkstyle>

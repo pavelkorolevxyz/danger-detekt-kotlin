@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="4.3">
+    <file name="A.kt">
+        <error column="1" line="1" message="Error A" severity="error" source="Rule A" />
+    </file>
+</checkstyle>
