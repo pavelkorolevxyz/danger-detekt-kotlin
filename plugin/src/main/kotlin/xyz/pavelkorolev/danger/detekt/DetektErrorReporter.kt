@@ -53,7 +53,10 @@ class DefaultDetektErrorReporter(
         report(message, severity, filePath, line)
     }
 
-    private fun report(message: String, severity: DetektErrorSeverity) {
+    private fun report(
+        message: String,
+        severity: DetektErrorSeverity,
+    ) {
         when (severity) {
             DetektErrorSeverity.INFO -> context.message(message)
             DetektErrorSeverity.WARNING -> context.warn(message)

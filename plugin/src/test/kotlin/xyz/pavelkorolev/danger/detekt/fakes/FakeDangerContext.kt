@@ -1,9 +1,9 @@
-package xyz.pavelkorolev.danger.detekt
+package xyz.pavelkorolev.danger.detekt.fakes
 
 import systems.danger.kotlin.sdk.DangerContext
 import systems.danger.kotlin.sdk.Violation
 
-class FakeDangerContext : DangerContext {
+internal class FakeDangerContext : DangerContext {
 
     override val fails = mutableListOf<Violation>()
     override val markdowns = mutableListOf<Violation>()

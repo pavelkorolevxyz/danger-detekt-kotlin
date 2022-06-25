@@ -2,8 +2,14 @@ package xyz.pavelkorolev.danger.detekt
 
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.core.spec.style.FunSpec
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.shouldBe
+import xyz.pavelkorolev.danger.detekt.fakes.FakeDangerContext
+import xyz.pavelkorolev.danger.detekt.fakes.FakeReporter
+import xyz.pavelkorolev.danger.detekt.model.DetektError
+import xyz.pavelkorolev.danger.detekt.model.DetektReport
+import xyz.pavelkorolev.danger.detekt.model.DetektReportFile
 import xyz.pavelkorolev.danger.detekt.utils.TestData
 
 internal class DetektPluginTest : FunSpec(
@@ -41,6 +47,18 @@ internal class DetektPluginTest : FunSpec(
             context.warnings.shouldNotBeEmpty()
             context.messages.shouldNotBeEmpty()
             context.fails.shouldNotBeEmpty()
+        }
+
+        test("should use custom reporter if provided") {
+            val reporter = FakeReporter()
+            val report = DetektReport(
+                files = listOf(
+                    DetektReportFile(errors = listOf(DetektError()))
+                )
+            )
+            plugin.report(report, reporter)
+            reporter.outputs shouldHaveSize 1
+            println(reporter.outputs)
         }
 
         test("should not crash with malformed report") {
