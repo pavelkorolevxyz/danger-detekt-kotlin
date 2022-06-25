@@ -7,14 +7,18 @@ import xyz.pavelkorolev.danger.detekt.model.DetektReport
 import java.io.File
 
 /**
- * Plugin to use in Dangerfiles
+ * Detekt artifacts parse and report plugin to use in Dangerfiles
  *
  * Usage:
- * `register.plugin(DetektPlugin)`
- * `val report = DetektPlugin.parse(files)`
- * `DetektPlugin.report(report)`
+ * ```
+ * register.plugin(DetektPlugin)
+ * val report = DetektPlugin.parse(files)
+ * DetektPlugin.report(report)
+ * ```
  * or
- * `DetektPlugin.parseAndReport(files)`
+ * ```
+ * DetektPlugin.parseAndReport(files)
+ * ```
  */
 object DetektPlugin : DangerPlugin() {
 

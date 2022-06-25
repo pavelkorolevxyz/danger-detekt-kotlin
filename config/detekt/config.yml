@@ -1,0 +1,16 @@
+config:
+  warningsAsErrors: true
+
+formatting:
+  MaximumLineLength:
+    active: false # Duplicates MaxLineLength rule
+  NoWildcardImports:
+    active: false # Duplicates WildcardImport rule
+  NewLineAtEndOfFile:
+    active: false # Duplicates FinalNewline rule
+
+style:
+  ReturnCount:
+    active: false
+  WildcardImport:
+    active: false # Clashes with default IntelliJ behavior

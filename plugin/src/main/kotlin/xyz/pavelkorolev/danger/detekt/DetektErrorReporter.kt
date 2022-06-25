@@ -1,8 +1,8 @@
 package xyz.pavelkorolev.danger.detekt
 
 import systems.danger.kotlin.sdk.DangerContext
-import xyz.pavelkorolev.danger.detekt.model.DetektErrorSeverity
 import xyz.pavelkorolev.danger.detekt.model.DetektError
+import xyz.pavelkorolev.danger.detekt.model.DetektErrorSeverity
 import java.io.File
 
 /**
