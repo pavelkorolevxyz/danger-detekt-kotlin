@@ -7,4 +7,6 @@ dependencyResolutionManagement {
     }
 }
 
+includeBuild("build-logic")
+
 include(":plugin")
