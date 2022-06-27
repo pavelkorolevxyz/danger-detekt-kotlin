@@ -1,3 +1,5 @@
+@file:Suppress("MemberVisibilityCanBePrivate")
+
 package xyz.pavelkorolev.danger.detekt.model
 
 import com.fasterxml.jackson.annotation.JsonProperty

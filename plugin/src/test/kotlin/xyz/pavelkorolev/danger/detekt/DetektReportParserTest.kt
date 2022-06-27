@@ -1,6 +1,8 @@
 package xyz.pavelkorolev.danger.detekt
 
 import io.kotest.core.spec.style.FunSpec
+import io.kotest.matchers.booleans.shouldBeFalse
+import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.shouldBe
 import xyz.pavelkorolev.danger.detekt.model.DetektError
 import xyz.pavelkorolev.danger.detekt.model.DetektErrorSeverity
@@ -95,6 +97,25 @@ internal class DetektReportParserTest : FunSpec(
                     ),
                 ),
             )
+        }
+        test("should return correct count") {
+            val report = parser.parse(
+                listOf(
+                    TestData.singleReportFile,
+                    TestData.multipleReportFile,
+                ),
+            )
+            report.count shouldBe 5
+            report.isEmpty.shouldBeFalse()
+        }
+        test("should report is empty correctly") {
+            val report = parser.parse(
+                listOf(
+                    TestData.emptyReportFile,
+                ),
+            )
+            report.count shouldBe 0
+            report.isEmpty.shouldBeTrue()
         }
     },
 )
