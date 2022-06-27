@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "xyz.pavelkorolev.danger.detekt"
-version = "1.0.0"
+version = "1.0.1"
 
 dependencies {
     implementation("systems.danger:danger-kotlin-sdk:1.2")

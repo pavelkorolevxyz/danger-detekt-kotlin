@@ -28,7 +28,7 @@ fun interface DetektErrorReporter {
 /**
  * Out of box reporter implementation which sends [DangerContext.message], [DangerContext.warn] and
  * [DangerContext.fail] based on violation severity with default message, file and line if provided.
- * Created message looks like "Detekt: Something wrong, Rule: detekt.SomethingWrongRule"
+ * Created message looks like "**Detekt:** Something wrong **Rule:** detekt.SomethingWrongRule"
  */
 class DefaultDetektErrorReporter(
     private val context: DangerContext,
@@ -85,11 +85,12 @@ class DefaultDetektErrorReporter(
     }
 
     private fun createMessage(error: DetektError): String {
-        val message = error.message?.let { "Detekt: $it" }
-        val rule = error.source?.let { "Rule: $it" }
+        val message = error.message?.let { "**Detekt**: $it" }
+        val rule = error.source?.let { "**Rule**: $it" }
         return listOfNotNull(
+            "", // start message with blank line
             message,
             rule,
-        ).joinToString(separator = ", ")
+        ).joinToString(separator = "\n")
     }
 }

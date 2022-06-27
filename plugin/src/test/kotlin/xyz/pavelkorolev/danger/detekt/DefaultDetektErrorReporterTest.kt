@@ -54,7 +54,7 @@ internal class DefaultDetektErrorReporterTest : FunSpec(
 
             val violation = context.warnings.first()
             test("message") {
-                violation.message shouldBe "Detekt: Test, Rule: detekt.Test"
+                violation.message shouldBe "\n**Detekt**: Test\n**Rule**: detekt.Test"
             }
             test("file") {
                 violation.file shouldBe fileName
@@ -90,7 +90,7 @@ internal class DefaultDetektErrorReporterTest : FunSpec(
                 )
                 reporter.report(error, fileName = "report.xml")
                 context.warnings.shouldNotBeEmpty()
-                context.warnings.first().message shouldBe "Detekt: Message"
+                context.warnings.first().message shouldBe "\n**Detekt**: Message"
             }
             test("source") {
                 val error = DetektError(
@@ -99,7 +99,7 @@ internal class DefaultDetektErrorReporterTest : FunSpec(
                 )
                 reporter.report(error, fileName = "report.xml")
                 context.warnings.shouldNotBeEmpty()
-                context.warnings.first().message shouldBe "Rule: Source"
+                context.warnings.first().message shouldBe "\n**Rule**: Source"
             }
         }
 
