@@ -169,4 +169,4 @@ plugin.report(report) { error, _ ->
 
 ## Side notes
 
-This plugin is heavily inspired by [AckeeCZ/danger-kotlin-detekt](https://github.com/AckeeCZ/danger-kotlin-detekt) which is great, but lacks of customization and preliminary checks possibilities.
+This plugin is heavily inspired by [AckeeCZ/danger-kotlin-detekt](https://github.com/AckeeCZ/danger-kotlin-detekt) which is great, but lacks of customization and preliminary checks capabilities.
