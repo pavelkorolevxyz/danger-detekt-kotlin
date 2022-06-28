@@ -10,11 +10,15 @@ Depends on you. We constrained only with **detekt/kotlin** file and line appeara
 
 ### Like this
 
-<img src="images/warnings.webp" width="900">
+<img src="images/global.png" width="900">
+
+### With inline comments
+
+<img src="images/inline.png" width="900">
 
 ### Or this
 
-<img src="images/no-warnings.webp" width="900">
+<img src="images/no-warnings.png" width="900">
 
 ## Usage
 
@@ -109,7 +113,7 @@ fun warnDetekt() {
             return
         }
         fail(
-            "🚫 Detekt violations found: **${report.count}**.\n" +
+            "🙁 Detekt violations found: **${report.count}**.\n" +
                     "Please fix them to proceed. We have zero-warning policy"
         )
         report(report)
