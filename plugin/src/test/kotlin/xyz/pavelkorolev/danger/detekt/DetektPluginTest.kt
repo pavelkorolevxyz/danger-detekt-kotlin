@@ -58,7 +58,6 @@ internal class DetektPluginTest : FunSpec(
             )
             plugin.report(report, reporter)
             reporter.outputs shouldHaveSize 1
-            println(reporter.outputs)
         }
 
         test("should not crash with malformed report") {

@@ -64,6 +64,29 @@ internal class DefaultDetektErrorReporterTest : FunSpec(
             }
         }
 
+        context("should not report file and line if inline option disabled") {
+            val error = DetektError(
+                column = 1,
+                line = 2,
+                message = "Test",
+                severity = DetektErrorSeverity.WARNING,
+                source = "detekt.Test",
+            )
+            val noInlineReporter = DefaultDetektErrorReporter(context, isInlineEnabled = false)
+            noInlineReporter.report(error, "Test.kt")
+
+            val violation = context.warnings.first()
+            test("message") {
+                violation.message shouldBe "\n**Detekt**: Test\n**Rule**: detekt.Test"
+            }
+            test("file") {
+                violation.file.shouldBeNull()
+            }
+            test("line") {
+                violation.line.shouldBeNull()
+            }
+        }
+
         context("should report with message if params are null") {
             test("file") {
                 val error = DetektError(

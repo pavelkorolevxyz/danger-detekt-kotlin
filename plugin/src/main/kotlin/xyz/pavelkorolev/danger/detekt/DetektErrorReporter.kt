@@ -32,6 +32,7 @@ fun interface DetektErrorReporter {
  */
 class DefaultDetektErrorReporter(
     private val context: DangerContext,
+    private val isInlineEnabled: Boolean = true,
 ) : DetektErrorReporter {
 
     private val pathPrefix = File("").absolutePath
@@ -46,7 +47,7 @@ class DefaultDetektErrorReporter(
         val filePath = file?.let(::createFilePath)
         val line = error.line
 
-        if (line == null || filePath == null) {
+        if (!isInlineEnabled || line == null || filePath == null) {
             report(message, severity)
             return
         }
@@ -79,9 +80,7 @@ class DefaultDetektErrorReporter(
 
     private fun createFilePath(file: File): String? {
         if (file.absolutePath == pathPrefix) return null
-        return file.absolutePath
-            .removePrefix(pathPrefix)
-            .removePrefix(File.separator)
+        return file.absolutePath.removePrefix(pathPrefix + File.separator)
     }
 
     private fun createMessage(error: DetektError): String {

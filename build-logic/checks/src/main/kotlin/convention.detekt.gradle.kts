@@ -28,6 +28,7 @@ detekt {
 
     config.setFrom(configFile)
     buildUponDefaultConfig = true
+    basePath = rootDir.absolutePath
 
     baseline = baselineFile
 }
