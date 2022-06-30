@@ -6,7 +6,7 @@ Plugin for [danger/kotlin](https://github.com/danger/kotlin) which helps to pars
 
 ## How it looks like
 
-Depends on you. We constrained only with **detekt/kotlin** file and line appearance, and repository hosting (e.g. **GitHub**) markdown capabilities. Anything else is customizable.
+Depends on you. We constrained only with **danger/kotlin** file and line appearance, and repository hosting (e.g. **GitHub**) markdown capabilities. Anything else is customizable.
 
 ### Like this
 
