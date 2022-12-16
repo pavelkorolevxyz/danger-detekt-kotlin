@@ -1,8 +1,8 @@
-package xyz.pavelkorolev.danger.detekt.model
+package xyz.pavelkorolev.danger.detekt.parser.checkstyle.model
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 
-data class DetektError(
+internal data class CheckstyleError(
 
     @field:JacksonXmlProperty
     val column: Int? = null,
@@ -14,7 +14,7 @@ data class DetektError(
     val message: String? = null,
 
     @field:JacksonXmlProperty
-    val severity: DetektErrorSeverity? = null,
+    val severity: CheckstyleErrorSeverity? = null,
 
     @field:JacksonXmlProperty
     val source: String? = null,

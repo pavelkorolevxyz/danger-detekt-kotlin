@@ -1,13 +1,13 @@
 package xyz.pavelkorolev.danger.detekt.fakes
 
-import xyz.pavelkorolev.danger.detekt.DetektErrorReporter
-import xyz.pavelkorolev.danger.detekt.model.DetektError
+import xyz.pavelkorolev.danger.detekt.DetektViolationReporter
+import xyz.pavelkorolev.danger.detekt.model.DetektViolation
 
-internal class FakeReporter : DetektErrorReporter {
+internal class FakeReporter : DetektViolationReporter {
 
-    val outputs = mutableListOf<DetektError>()
+    val outputs = mutableListOf<DetektViolation>()
 
-    override fun report(error: DetektError, fileName: String?) {
-        outputs.add(error)
+    override fun report(violation: DetektViolation) {
+        outputs.add(violation)
     }
 }

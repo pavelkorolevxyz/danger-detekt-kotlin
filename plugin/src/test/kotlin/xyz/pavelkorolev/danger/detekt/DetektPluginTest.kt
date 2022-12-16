@@ -7,9 +7,8 @@ import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.shouldBe
 import xyz.pavelkorolev.danger.detekt.fakes.FakeDangerContext
 import xyz.pavelkorolev.danger.detekt.fakes.FakeReporter
-import xyz.pavelkorolev.danger.detekt.model.DetektError
 import xyz.pavelkorolev.danger.detekt.model.DetektReport
-import xyz.pavelkorolev.danger.detekt.model.DetektReportFile
+import xyz.pavelkorolev.danger.detekt.model.DetektViolation
 import xyz.pavelkorolev.danger.detekt.utils.TestData
 
 internal class DetektPluginTest : FunSpec(
@@ -23,27 +22,27 @@ internal class DetektPluginTest : FunSpec(
         }
 
         test("should return no violations on empty report") {
-            plugin.parseAndReport(TestData.emptyReportFile)
+            plugin.parseAndReport(TestData.CheckstyleReport.empty)
             context.violationsCount shouldBe 0
         }
 
-        test("should return one warning violation for single error report") {
-            plugin.parseAndReport(TestData.singleReportFile)
+        test("should return one warning violation for single violation report") {
+            plugin.parseAndReport(TestData.CheckstyleReport.single)
             context.violationsCount shouldBe 1
         }
 
         test("should return multiple warning violations for larger reports") {
-            plugin.parseAndReport(TestData.multipleReportFile)
+            plugin.parseAndReport(TestData.CheckstyleReport.multiple)
             context.violationsCount shouldBe 4
         }
 
         test("should merge multiple reports") {
-            plugin.parseAndReport(TestData.singleReportFile, TestData.multipleReportFile)
+            plugin.parseAndReport(TestData.CheckstyleReport.single, TestData.CheckstyleReport.multiple)
             context.violationsCount shouldBe 5
         }
 
         test("should report based on severity") {
-            plugin.parseAndReport(TestData.singleReportFile, TestData.multipleReportFile)
+            plugin.parseAndReport(TestData.CheckstyleReport.single, TestData.CheckstyleReport.multiple)
             context.warnings.shouldNotBeEmpty()
             context.messages.shouldNotBeEmpty()
             context.fails.shouldNotBeEmpty()
@@ -52,17 +51,25 @@ internal class DetektPluginTest : FunSpec(
         test("should use custom reporter if provided") {
             val reporter = FakeReporter()
             val report = DetektReport(
-                files = listOf(
-                    DetektReportFile(errors = listOf(DetektError()))
-                )
+                violations = listOf(DetektViolation()),
             )
             plugin.report(report, reporter)
             reporter.outputs shouldHaveSize 1
         }
 
+        test("should parse report from sarif") {
+            val report = plugin.parse(TestData.SarifReport.multiple)
+            report.violations shouldHaveSize 2
+        }
+
+        test("should parse and report checkstyle and sarif reports in one run") {
+            plugin.parseAndReport(TestData.CheckstyleReport.single, TestData.SarifReport.multiple)
+            context.violationsCount shouldBe 3
+        }
+
         test("should not crash with malformed report") {
             shouldNotThrow<Throwable> {
-                plugin.parseAndReport(TestData.malformedReportFile)
+                plugin.parseAndReport(TestData.CheckstyleReport.malformed)
                 context.fails
             }
         }

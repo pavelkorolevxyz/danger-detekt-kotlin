@@ -1,51 +1,48 @@
 package xyz.pavelkorolev.danger.detekt
 
 import systems.danger.kotlin.sdk.DangerContext
-import xyz.pavelkorolev.danger.detekt.model.DetektError
-import xyz.pavelkorolev.danger.detekt.model.DetektErrorSeverity
+import xyz.pavelkorolev.danger.detekt.model.DetektViolation
+import xyz.pavelkorolev.danger.detekt.model.DetektViolationSeverity
 import java.io.File
 
 /**
  * Interface of violation reporting logic.
  *
- * If you wish to report only error level violations or write custom message with emojis
+ * If you want to report only error level violations or write custom message with emojis
  * feel free to implement this.
  *
- * You could use DangerContext to call [DangerContext.message], [DangerContext.warn],
+ * You could use [DangerContext] to call [DangerContext.message], [DangerContext.warn],
  * [DangerContext.fail] etc functions in your reporter.
  */
-fun interface DetektErrorReporter {
+fun interface DetektViolationReporter {
 
     /**
-     * Reports a violation [error] in file with given [fileName] found by detekt.
+     * Reports a [violation] found by detekt.
      */
-    fun report(
-        error: DetektError,
-        fileName: String?,
-    )
+    fun report(violation: DetektViolation)
 }
 
 /**
  * Out of box reporter implementation which sends [DangerContext.message], [DangerContext.warn] and
  * [DangerContext.fail] based on violation severity with default message, file and line if provided.
+ *
  * Created message looks like "**Detekt:** Something wrong **Rule:** detekt.SomethingWrongRule"
  */
-class DefaultDetektErrorReporter(
+class DefaultDetektViolationReporter(
     private val context: DangerContext,
     private val isInlineEnabled: Boolean = true,
-) : DetektErrorReporter {
+) : DetektViolationReporter {
 
     private val pathPrefix = File("").absolutePath
 
     override fun report(
-        error: DetektError,
-        fileName: String?,
+        violation: DetektViolation,
     ) {
-        val message = createMessage(error)
-        val severity = error.severity ?: DetektErrorSeverity.WARNING
-        val file = fileName?.let(::File)
+        val message = createMessage(violation)
+        val severity = violation.severity ?: DetektViolationSeverity.WARNING
+        val file = violation.filePath?.let(::File)
         val filePath = file?.let(::createFilePath)
-        val line = error.line
+        val line = violation.location?.startLine
 
         if (!isInlineEnabled || line == null || filePath == null) {
             report(message, severity)
@@ -56,25 +53,25 @@ class DefaultDetektErrorReporter(
 
     private fun report(
         message: String,
-        severity: DetektErrorSeverity,
+        severity: DetektViolationSeverity,
     ) {
         when (severity) {
-            DetektErrorSeverity.INFO -> context.message(message)
-            DetektErrorSeverity.WARNING -> context.warn(message)
-            DetektErrorSeverity.ERROR -> context.fail(message)
+            DetektViolationSeverity.INFO -> context.message(message)
+            DetektViolationSeverity.WARNING -> context.warn(message)
+            DetektViolationSeverity.ERROR -> context.fail(message)
         }
     }
 
     private fun report(
         message: String,
-        severity: DetektErrorSeverity,
+        severity: DetektViolationSeverity,
         filePath: String,
         line: Int,
     ) {
         when (severity) {
-            DetektErrorSeverity.INFO -> context.message(message, filePath, line)
-            DetektErrorSeverity.WARNING -> context.warn(message, filePath, line)
-            DetektErrorSeverity.ERROR -> context.fail(message, filePath, line)
+            DetektViolationSeverity.INFO -> context.message(message, filePath, line)
+            DetektViolationSeverity.WARNING -> context.warn(message, filePath, line)
+            DetektViolationSeverity.ERROR -> context.fail(message, filePath, line)
         }
     }
 
@@ -83,9 +80,9 @@ class DefaultDetektErrorReporter(
         return file.absolutePath.removePrefix(pathPrefix + File.separator)
     }
 
-    private fun createMessage(error: DetektError): String {
-        val message = error.message?.let { "**Detekt**: $it" }
-        val rule = error.source?.let { "**Rule**: $it" }
+    private fun createMessage(violation: DetektViolation): String {
+        val message = violation.message?.let { "**Detekt**: $it" }
+        val rule = violation.ruleId?.let { "**Rule**: $it" }
         return listOfNotNull(
             "", // start message with blank line
             message,

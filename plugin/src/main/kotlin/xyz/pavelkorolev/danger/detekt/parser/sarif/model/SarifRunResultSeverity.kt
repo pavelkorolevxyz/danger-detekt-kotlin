@@ -1,8 +1,8 @@
-package xyz.pavelkorolev.danger.detekt.model
+package xyz.pavelkorolev.danger.detekt.parser.sarif.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-enum class DetektErrorSeverity {
+internal enum class SarifRunResultSeverity {
 
     @JsonProperty("info")
     INFO,
