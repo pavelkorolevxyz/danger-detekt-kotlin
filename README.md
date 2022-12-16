@@ -2,7 +2,7 @@
 
 # Detekt Plugin for Danger Kotlin
 
-Plugin for [danger/kotlin](https://github.com/danger/kotlin) which helps to parse and report [detekt](https://github.com/detekt/detekt) violations from its XML report files.
+Plugin for [danger/kotlin](https://github.com/danger/kotlin) which helps to parse and report [detekt](https://github.com/detekt/detekt) violations from its Checkstyle XML or SARIF report files.
 
 ## How it looks like
 
@@ -23,7 +23,7 @@ Depends on you. We constrained only with **danger/kotlin** file and line appeara
 ## Usage
 
 `Dangerfile.df.kts` is the main configuration file of any **danger/kotlin** setup. To use this plugin you should add it as a dependency on top of this file and call register.
-
+Latest version could be found in [Maven Central](https://search.maven.org/artifact/xyz.pavelkorolev.danger.detekt/plugin)
 ```kotlin
 @file:DependsOn("xyz.pavelkorolev.danger.detekt:plugin:x.y.z")
 
@@ -98,7 +98,7 @@ danger(args) {
 }
 
 fun warnDetekt() {
-    val file = File("build/reports/detekt/report.xml")
+    val file = File("build/reports/detekt/report.xml") // or report.sarif
     if (!file.exists()) {
         warn(
             "🙈 No detekt report found",
@@ -123,23 +123,23 @@ fun warnDetekt() {
 
 ## Customization
 
-Functions `DetektPlugin.report` and `DetektPlugin.parseAndReport` have `reporter: DetektErrorReporter` parameter, which is in fact a functional interface with `report(error: DetektError, fileName: String?)` function.
+Functions `DetektPlugin.report` and `DetektPlugin.parseAndReport` have `reporter: DetektViolationReporter` parameter, which is in fact a functional interface with `report(violation: DetektViolation)` function.
 
 By implementing this you could customize reporting logic and appearance as you want.
 
-By default, there is [DefaultDetektErrorReporter](https://github.com/pavelkorolevxyz/danger-detekt-kotlin/blob/12705b550408c42331fa9c4b434a2b62dc16d7f7/plugin/src/main/kotlin/xyz/pavelkorolev/danger/detekt/DetektErrorReporter.kt#L33) which has its own opinionated way to create messages and respect violations severities.
+By default, there is [DefaultDetektViolationReporter](https://github.com/pavelkorolevxyz/danger-detekt-kotlin/blob/12705b550408c42331fa9c4b434a2b62dc16d7f7/plugin/src/main/kotlin/xyz/pavelkorolev/danger/detekt/DetektErrorReporter.kt#L33) which has its own opinionated way to create messages and respect violations severities.
 
-`DefaultDetektErrorReporter` uses inline comments if file and line provided for error. If you want to use only global report without inline comments then use `DefaultDetektErrorReporter(context, isInlineEnabled = false)` instead.
+`DefaultDetektViolationReporter` uses inline comments if file and line provided for error. If you want to use only global report without inline comments then use `DefaultDetektViolationReporter(context, isInlineEnabled = false)` instead.
 
 ### Implementation
 
 Let's say you want to send everything found into fail table with emojis at the end. Write it like this.
 
 ```kotlin
-class FailReporter(private val context: DangerContext) : DetektErrorReporter {
+class FailReporter(private val context: DangerContext) : DetektViolationReporter {
 
-    override fun report(error: DetektError, fileName: String?) {
-        val message = error.message ?: return
+    override fun report(violation: DetektViolation) {
+        val message = violation.message ?: return
         context.fail("$message 💥💥💥")
     }
 }
@@ -154,8 +154,8 @@ DetektPlugin.report(report, reporter = FailReporter(context))
 Or you could implement the same as inline reporter thanks to its functional interface nature like so.
 
 ```kotlin
-plugin.report(report) { error, _ ->
-    error.message?.let(context::fail)
+plugin.report(report) { violation ->
+    violation.message?.let(context::fail)
 }
 ```
 

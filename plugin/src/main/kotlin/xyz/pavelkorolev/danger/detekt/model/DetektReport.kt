@@ -1,26 +1,16 @@
-@file:Suppress("MemberVisibilityCanBePrivate")
-
 package xyz.pavelkorolev.danger.detekt.model
 
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
-
-@JacksonXmlRootElement(namespace = "checkstyle")
 data class DetektReport(
-
-    @field:JsonProperty("file")
-    @field:JacksonXmlElementWrapper(useWrapping = false)
-    val files: List<DetektReportFile> = emptyList(),
+    val violations: List<DetektViolation> = emptyList(),
 ) {
 
     /**
-     * Returns violations number in all files of given report combined
+     * Returns total violations count
      */
-    val count: Int get() = files.fold(0) { acc, file -> acc + file.errors.size }
+    val count: Int get() = violations.size
 
     /**
-     * Returns true if there are 0 files inside or 0 errors inside all files
+     * Returns true if there are no violations found
      */
-    val isEmpty: Boolean get() = files.isEmpty() || count == 0
+    val isEmpty: Boolean get() = violations.isEmpty()
 }
