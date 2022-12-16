@@ -127,7 +127,7 @@ Functions `DetektPlugin.report` and `DetektPlugin.parseAndReport` have `reporter
 
 By implementing this you could customize reporting logic and appearance as you want.
 
-By default, there is [DefaultDetektViolationReporter](https://github.com/pavelkorolevxyz/danger-detekt-kotlin/blob/12705b550408c42331fa9c4b434a2b62dc16d7f7/plugin/src/main/kotlin/xyz/pavelkorolev/danger/detekt/DetektErrorReporter.kt#L33) which has its own opinionated way to create messages and respect violations severities.
+By default, there is [DefaultDetektViolationReporter](https://github.com/pavelkorolevxyz/danger-detekt-kotlin/blob/4bb723c900845d32db56c7209ef413ea622961f3/plugin/src/main/kotlin/xyz/pavelkorolev/danger/detekt/DetektViolationReporter.kt#L31) which has its own opinionated way to create messages and respect violations severities.
 
 `DefaultDetektViolationReporter` uses inline comments if file and line provided for error. If you want to use only global report without inline comments then use `DefaultDetektViolationReporter(context, isInlineEnabled = false)` instead.
 
